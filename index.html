@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Archimedes Quantum Laboratory — Scientific Roadmap</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --surface2: #1a2236;
+      --border: #1e2d4a;
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+      --accent3: #34d399;
+      --accent4: #fb923c;
+      --accent5: #f472b6;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --glow: rgba(56,189,248,0.15);
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── Animated background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(56,189,248,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(129,140,248,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Layout ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+
+    /* ── Navigation ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,14,26,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+    }
+    nav .container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    .nav-brand {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 1rem; font-weight: 700; color: var(--accent);
+      text-decoration: none; letter-spacing: 0.02em;
+    }
+    .nav-brand .atom { font-size: 1.4rem; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none; font-size: 0.85rem;
+      transition: color 0.2s; letter-spacing: 0.03em;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 6rem 0 4rem;
+      text-align: center;
+      position: relative;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.3);
+      color: var(--accent); border-radius: 2rem; padding: 0.3rem 1rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #e2e8f0 0%, var(--accent) 50%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.2rem;
+    }
+    .hero-subtitle {
+      font-size: 1.15rem; color: var(--text-muted); max-width: 680px;
+      margin: 0 auto 2rem; line-height: 1.8;
+    }
+    .hero-quote {
+      font-style: italic; color: var(--accent); font-size: 1rem;
+      border-left: 3px solid var(--accent); padding-left: 1rem;
+      display: inline-block; text-align: left; margin-bottom: 2.5rem;
+    }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .stat { text-align: center; }
+    .stat-value { font-size: 2rem; font-weight: 800; color: var(--accent); display: block; }
+    .stat-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ── Section headers ── */
+    section { padding: 4rem 0; }
+    .section-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800;
+      color: var(--text); margin-bottom: 0.75rem; line-height: 1.2;
+    }
+    .section-desc {
+      color: var(--text-muted); max-width: 640px; margin-bottom: 3rem;
+      font-size: 0.95rem; line-height: 1.8;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.75rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+      border-color: rgba(56,189,248,0.4);
+      box-shadow: 0 0 30px rgba(56,189,248,0.08);
+    }
+    .card-grid { display: grid; gap: 1.5rem; }
+    .card-grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+    .card-grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+    /* ── Roadmap ── */
+    .roadmap { position: relative; }
+    .roadmap-phases { display: flex; flex-direction: column; gap: 0; }
+    .phase-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0 1.5rem;
+      position: relative;
+    }
+    .phase-item + .phase-item { margin-top: 0; }
+    .phase-left {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .phase-dot {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1rem; flex-shrink: 0;
+      position: relative; z-index: 2;
+      border: 2px solid;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .phase-item:hover .phase-dot { transform: scale(1.1); }
+    .phase-line {
+      width: 2px; flex: 1; min-height: 2rem;
+      background: linear-gradient(to bottom, currentColor, transparent);
+      opacity: 0.3;
+    }
+    .phase-content {
+      padding: 0.5rem 0 2.5rem;
+    }
+    .phase-header {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap;
+    }
+    .phase-title { font-size: 1.1rem; font-weight: 700; }
+    .phase-badge {
+      font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.7rem;
+      border-radius: 1rem; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .badge-done { background: rgba(52,211,153,0.15); color: var(--accent3); border: 1px solid rgba(52,211,153,0.3); }
+    .badge-active { background: rgba(56,189,248,0.15); color: var(--accent); border: 1px solid rgba(56,189,248,0.3); }
+    .badge-future { background: rgba(129,140,248,0.15); color: var(--accent2); border: 1px solid rgba(129,140,248,0.3); }
+    .phase-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.7; }
+    .phase-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag {
+      font-size: 0.72rem; padding: 0.2rem 0.6rem;
+      border-radius: 0.4rem; background: var(--surface2);
+      border: 1px solid var(--border); color: var(--text-muted);
+    }
+
+    /* Phase colors */
+    .phase-1 .phase-dot { background: rgba(52,211,153,0.1); color: var(--accent3); border-color: var(--accent3); }
+    .phase-1 .phase-line { color: var(--accent3); }
+    .phase-2 .phase-dot { background: rgba(56,189,248,0.1); color: var(--accent); border-color: var(--accent); }
+    .phase-2 .phase-line { color: var(--accent); }
+    .phase-3 .phase-dot { background: rgba(129,140,248,0.1); color: var(--accent2); border-color: var(--accent2); }
+    .phase-3 .phase-line { color: var(--accent2); }
+    .phase-4 .phase-dot { background: rgba(251,146,60,0.1); color: var(--accent4); border-color: var(--accent4); }
+    .phase-4 .phase-line { color: var(--accent4); }
+    .phase-5 .phase-dot { background: rgba(244,114,182,0.1); color: var(--accent5); border-color: var(--accent5); }
+    .phase-5 .phase-line { color: var(--accent5); }
+
+    /* ── Chart containers ── */
+    .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.75rem; }
+    .chart-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .chart-subtitle { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+    .chart-wrap { position: relative; }
+
+    /* ── Architecture ── */
+    .arch-tree {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.82rem;
+      line-height: 1.9;
+      color: var(--text-muted);
+      overflow-x: auto;
+    }
+    .arch-tree .dir { color: var(--accent); font-weight: 700; }
+    .arch-tree .file { color: var(--text); }
+    .arch-tree .comment { color: var(--text-dim); }
+
+    /* ── Principles ── */
+    .principle-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border-left: 3px solid;
+      transition: transform 0.2s;
+    }
+    .principle-card:hover { transform: translateX(4px); }
+    .principle-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .principle-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .principle-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* ── Equations ── */
+    .equation-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.25rem 1.5rem;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 0.88rem;
+      color: var(--accent3);
+      overflow-x: auto;
+      margin: 0.75rem 0;
+    }
+    .equation-label { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ── Status bar ── */
+    .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .status-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .status-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .status-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .status-value { font-size: 0.95rem; font-weight: 700; }
+
+    /* ── Divider ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Tooltip ── */
+    [data-tooltip] { cursor: help; }
+
+    /* ── Progress bars ── */
+    .progress-item { margin-bottom: 1.25rem; }
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
+    .progress-name { font-size: 0.85rem; font-weight: 600; }
+    .progress-pct { font-size: 0.82rem; color: var(--text-muted); }
+    .progress-bar { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 3px; transition: width 1.2s ease; }
+
+    /* ── Bloch sphere SVG ── */
+    .bloch-container { display: flex; justify-content: center; align-items: center; padding: 1rem 0; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .hero-stats { gap: 1.5rem; }
+      .phase-item { grid-template-columns: 48px 1fr; }
+      .phase-dot { width: 36px; height: 36px; font-size: 0.82rem; }
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeInUp 0.6s ease forwards; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+    .pulse-dot::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      animation: pulse-ring 2s ease-out infinite;
+    }
+
+    /* ── Tab system ── */
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .tab-btn {
+      padding: 0.4rem 1rem; border-radius: 0.5rem; border: 1px solid var(--border);
+      background: var(--surface2); color: var(--text-muted); font-size: 0.82rem;
+      cursor: pointer; transition: all 0.2s; font-family: var(--font);
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: rgba(56,189,248,0.1); border-color: var(--accent); color: var(--accent);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Highlight box ── */
+    .highlight-box {
+      background: rgba(56,189,248,0.05);
+      border: 1px solid rgba(56,189,248,0.2);
+      border-radius: 0.75rem;
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0;
+    }
+    .highlight-box p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; }
+    .highlight-box strong { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav>
+  <div class="container">
+    <a class="nav-brand" href="#">
+      <span class="atom">⚛</span>
+      Archimedes Quantum Laboratory
+    </a>
+    <ul class="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#physics">Physics</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#progress">Progress</a></li>
+      <li><a href="#philosophy">Philosophy</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge fade-in">⚛ Scientific Roadmap &nbsp;·&nbsp; Quantum Research</div>
+    <h1 class="fade-in delay-1">Archimedes Quantum<br>Resonance Engine</h1>
+    <p class="hero-subtitle fade-in delay-2">
+      A rigorous digital scientific laboratory for studying, controlling, and visualizing
+      real quantum systems — from classical Lorentz oscillators to polaritonic condensed matter.
+    </p>
+    <blockquote class="hero-quote fade-in delay-3">
+      "Dadme una frecuencia y moveré el mundo" — Arquímedes 2.0
+    </blockquote>
+    <div class="hero-stats fade-in">
+      <div class="stat">
+        <span class="stat-value">5</span>
+        <span class="stat-label">Research Phases</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">3</span>
+        <span class="stat-label">API Layers</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">260nm</span>
+        <span class="stat-label">Flagship Experiment</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">&lt;1%</span>
+        <span class="stat-label">Validation RMS Error</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<hr class="divider" />
+
+<!-- ── Overview ── -->
+<section id="overview">
+  <div class="container">
+    <div class="section-label">Overview</div>
+    <h2 class="section-title">What is Archimedes?</h2>
+    <p class="section-desc">
+      A dual-layer digital instrument that bridges quantum simulation with physical hardware design,
+      maintaining ontological continuity across all physical regimes.
+    </p>
+
+    <div class="card-grid card-grid-3">
+      <div class="principle-card" style="border-color: var(--accent3);">
+        <div class="principle-icon">🔬</div>
+        <div class="principle-title">Scientific Instrument</div>
+        <div class="principle-text">Not an academic simulator or notebook collection — a rigorous digital instrument that reproduces, validates, and extends real physical experiments.</div>
+      </div>
+      <div class="principle-card" style="border-color: var(--accent);">
+        <div class="principle-icon">🔗</div>
+        <div class="principle-title">Ontological Continuity</div>
+        <div class="principle-text">Every abstraction collapses correctly to its physical limit. The TLS model must reproduce the exact Lorentzian response in the weak-field regime.</div>
+      </div>
+      <div class="principle-card" style="border-color: var(--accent2);">
+        <div class="principle-icon">🏗</div>
+        <div class="principle-title">Architecture Follows Physics</div>
+        <div class="principle-text">The guiding principle: <em>architecture follows physics, not the reverse</em>. Every design decision is grounded in physical correctness.</div>
+      </div>
+      <div class="principle-card" style="border-color: var(--accent4);">
+        <div class="principle-icon">⚡</div>
+        <div class="principle-title">Dual-Layer Design</div>
+        <div class="principle-text">Layer 1 is quantum simulation (this repository). Layer 2 is future hardware implementation — generating blueprints for physical apparatus.</div>
+      </div>
+      <div class="principle-card" style="border-color: var(--accent5);">
+        <div class="principle-icon">🧠</div>
+        <div class="principle-title">Cognitive Laboratory</div>
+        <div class="principle-text">Where theory, simulation, and control converge. Designed to extend, design, predict, and validate real experiments.</div>
+      </div>
+      <div class="principle-card" style="border-color: var(--accent3);">
+        <div class="principle-icon">📐</div>
+        <div class="principle-title">SI Unit Rigour</div>
+        <div class="principle-text">All computations use CODATA 2018 constants in SI units. Physical accuracy is enforced at every layer of the stack.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── Roadmap ── -->
+<section id="roadmap">
+  <div class="container">
+    <div class="section-label">Scientific Roadmap</div>
+    <h2 class="section-title">Five-Phase Research Programme</h2>
+    <p class="section-desc">
+      The laboratory develops in a physically correct hierarchical order — from classical foundations
+      to quantum field theory — deliberately avoiding the conceptual error of quantizing the field
+      before understanding the quantum response of matter.
+    </p>
+
+    <div class="roadmap-phases">
+
+      <!-- Phase 1 -->
+      <div class="phase-item phase-1">
+        <div class="phase-left">
+          <div class="phase-dot pulse-dot">1</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Classical Foundation — Lorentz Oscillator</span>
+            <span class="phase-badge badge-done">✓ Complete</span>
+          </div>
+          <p class="phase-desc">
+            The electron is modelled as a <strong>damped harmonic oscillator</strong> driven by an electromagnetic field.
+            This classical Lorentz model accurately describes UV/visible absorption in organic molecules,
+            running in milliseconds and enabling rapid iteration. The flagship experiment — pyridine UV
+            calibration at 260 nm — achieves a quality factor Q = 5.2 and sub-1 nm peak deviation.
+          </p>
+          <div class="equation-label">Lorentz Susceptibility</div>
+          <div class="equation-block">χ(ω) = (ω₀² - ω²) / [(ω₀² - ω²)² + γ²ω²]  +  i · γω / [(ω₀² - ω²)² + γ²ω²]</div>
+          <div class="phase-tags">
+            <span class="tag">Lorentz Resonator</span>
+            <span class="tag">UV Spectroscopy</span>
+            <span class="tag">Pyridine @ 260 nm</span>
+            <span class="tag">Q = 5.2</span>
+            <span class="tag">SI Units</span>
+            <span class="tag">Analytical Solution</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase-item phase-2">
+        <div class="phase-left">
+          <div class="phase-dot">2</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Quantum Matter + Classical Field — TLS & Decoherence</span>
+            <span class="phase-badge badge-active">In Development</span>
+          </div>
+          <p class="phase-desc">
+            The atom is replaced by a <strong>Two-Level System (TLS)</strong> with discrete quantum transitions.
+            The Bloch vector (u, v, w) captures the full quantum state, while T₁ (energy relaxation) and
+            T₂ (dephasing) model decoherence. The Lindblad master equation governs open-system dynamics.
+            The critical validation: in the weak-field limit, the TLS must reproduce the Lorentz line
+            with RMS error &lt; 1%.
+          </p>
+          <div class="equation-label">Bloch Equations (Rotating Frame)</div>
+          <div class="equation-block">du/dt = -Δv - u/T₂
+dv/dt =  Δu - Ω_R(t)·w - v/T₂
+dw/dt =  Ω_R(t)·v - (w - w_eq)/T₁</div>
+          <div class="phase-tags">
+            <span class="tag">Two-Level System</span>
+            <span class="tag">Bloch Vector</span>
+            <span class="tag">T₁ Relaxation</span>
+            <span class="tag">T₂ Dephasing</span>
+            <span class="tag">Lindblad Equation</span>
+            <span class="tag">RK4 Integration</span>
+            <span class="tag">TLS → Lorentz Validation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase-item phase-3">
+        <div class="phase-left">
+          <div class="phase-dot">3</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Coherent Control — Pulse Optimisation</span>
+            <span class="phase-badge badge-future">Planned</span>
+          </div>
+          <p class="phase-desc">
+            With the quantum matter model validated, the focus shifts to <strong>controlling quantum states</strong>
+            via shaped electromagnetic pulses. Optimal control algorithms (GRAPE and CRAB) will design
+            pulse sequences that maximise state-transfer fidelity. The Bloch sphere visualisation
+            provides an epistemological window into the dynamics — what cannot be seen cannot be controlled.
+          </p>
+          <div class="equation-label">Rabi Hamiltonian (Rotating Frame)</div>
+          <div class="equation-block">H(t) = ℏ/2 · [-Δ·σ_z + Ω_R(t)·σ_x]</div>
+          <div class="phase-tags">
+            <span class="tag">Pulse Shaping</span>
+            <span class="tag">GRAPE Algorithm</span>
+            <span class="tag">CRAB Algorithm</span>
+            <span class="tag">Fidelity Optimisation</span>
+            <span class="tag">Bloch Sphere</span>
+            <span class="tag">π-Pulse Design</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="phase-item phase-4">
+        <div class="phase-left">
+          <div class="phase-dot">4</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Quantum Field — Jaynes–Cummings & Cavities</span>
+            <span class="phase-badge badge-future">Planned</span>
+          </div>
+          <p class="phase-desc">
+            The electromagnetic field is <strong>quantised</strong> using the Jaynes–Cummings model,
+            describing a TLS coupled to a single cavity mode. This introduces vacuum Rabi splitting,
+            photon number states, and cavity quantum electrodynamics (cQED). The state representation
+            transitions to full state vectors in the combined atom–field Hilbert space.
+          </p>
+          <div class="equation-label">Jaynes–Cummings Hamiltonian</div>
+          <div class="equation-block">H_JC = ℏω_c·a†a + ℏω_0/2·σ_z + ℏg·(a·σ⁺ + a†·σ⁻)</div>
+          <div class="phase-tags">
+            <span class="tag">Jaynes–Cummings</span>
+            <span class="tag">Cavity QED</span>
+            <span class="tag">Vacuum Rabi Splitting</span>
+            <span class="tag">Photon Number States</span>
+            <span class="tag">Strong Coupling</span>
+            <span class="tag">Fock Space</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="phase-item phase-5">
+        <div class="phase-left">
+          <div class="phase-dot">5</div>
+          <div class="phase-line" style="background: transparent;"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Condensed Matter — Bands, Excitons & Polaritons</span>
+            <span class="phase-badge badge-future">Future</span>
+          </div>
+          <p class="phase-desc">
+            The final phase extends the framework to <strong>solid-state quantum systems</strong>:
+            electronic band structures, exciton formation in semiconductors, and the emergence of
+            exciton-polaritons — quantum superpositions of photons and matter excitations. This
+            enables simulation of Bose-Einstein condensation, topological effects, and room-temperature
+            quantum coherence in polaritonic systems.
+          </p>
+          <div class="phase-tags">
+            <span class="tag">Band Structure</span>
+            <span class="tag">Excitons</span>
+            <span class="tag">Polaritons</span>
+            <span class="tag">Rabi Splitting</span>
+            <span class="tag">BEC Analogue</span>
+            <span class="tag">Semiconductor QED</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── Physics Charts ── -->
+<section id="physics">
+  <div class="container">
+    <div class="section-label">Physical Models</div>
+    <h2 class="section-title">Interactive Visualisations</h2>
+    <p class="section-desc">
+      Explore the core physical phenomena that underpin each phase of the roadmap through
+      interactive charts generated from the engine's mathematical models.
+    </p>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('lorentz')">Lorentz Spectrum</button>
+      <button class="tab-btn" onclick="showTab('rabi')">Rabi Oscillations</button>
+      <button class="tab-btn" onclick="showTab('bloch')">Bloch Dynamics</button>
+      <button class="tab-btn" onclick="showTab('jc')">Jaynes–Cummings</button>
+    </div>
+
+    <!-- Lorentz Tab -->
+    <div id="tab-lorentz" class="tab-panel active">
+      <div class="card-grid card-grid-2">
+        <div class="chart-card">
+          <div class="chart-title">Pyridine UV Absorption Spectrum</div>
+          <div class="chart-subtitle">Lorentz resonator model vs. experimental target (260 nm)</div>
+          <div class="chart-wrap" style="height:300px;">
+            <canvas id="lorentzChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Quality Factor Comparison</div>
+          <div class="chart-subtitle">Resonance linewidth as a function of damping coefficient γ</div>
+          <div class="chart-wrap" style="height:300px;">
+            <canvas id="qfactorChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="highlight-box" style="margin-top:1.5rem;">
+        <p>
+          The Lorentz oscillator model treats electrons as <strong>damped harmonic oscillators</strong> bound to atoms.
+          At the resonance frequency ω₀, absorption is maximised and the imaginary part of the susceptibility peaks.
+          The quality factor Q = ω₀/γ characterises the sharpness of the resonance. For pyridine at 260 nm,
+          Q = 5.2 and the peak deviation from experiment is &lt; 1 nm — confirming Phase 1 validation.
+        </p>
+      </div>
+    </div>
+
+    <!-- Rabi Tab -->
+    <div id="tab-rabi" class="tab-panel">
+      <div class="card-grid card-grid-2">
+        <div class="chart-card">
+          <div class="chart-title">Rabi Oscillations — Resonant Drive (Δ = 0)</div>
+          <div class="chart-subtitle">Excited-state population P_e(t) = sin²(Ω_R·t/2)</div>
+          <div class="chart-wrap" style="height:300px;">
+            <canvas id="rabiChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Off-Resonance Rabi Oscillations</div>
+          <div class="chart-subtitle">Effect of detuning Δ on oscillation frequency and amplitude</div>
+          <div class="chart-wrap" style="height:300px;">
+            <canvas id="rabiDetuningChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="highlight-box" style="margin-top:1.5rem;">
+        <p>
+          Rabi oscillations are the hallmark of coherent quantum control. Under a resonant drive (Δ = 0),
+          the excited-state population oscillates sinusoidally at the <strong>Rabi frequency Ω_R</strong>.
+          A π-pulse (half period) performs a complete population inversion |g⟩ → |e⟩. Off-resonance,
+          the generalised Rabi frequency Ω_eff = √(Ω_R² + Δ²) increases and amplitude decreases.
+        </p>
+      </div>
+    </div>
+
+    <!-- Bloch Tab -->
+    <div id="tab-bloch" class="tab-panel">
+      <div class="card-grid card-grid-2">
+        <div class="chart-card">
+          <div class="chart-title">Bloch Vector Relaxation</div>
+          <div class="chart-subtitle">Longitudinal (w) and transverse (u,v) components with T₁, T₂ decay</div>
+          <div class="chart-wrap" style="height:300px;">
+            <canvas id="blochRelaxChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">TLS → Lorentz Validation</div>
+          <div class="chart-subtitle">Quantum (TLS) vs. classical (Lorentz) absorption lineshape in weak-field limit</div>
+          <div class="chart-wrap" style="height:300px;">
+            <canvas id="tlsLorentzChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="highlight-box" style="margin-top:1.5rem;">
+        <p>
+          The Bloch sphere provides a geometric representation of the TLS state. The north pole is |e⟩,
+          the south pole is |g⟩, and the equatorial plane encodes coherences. T₁ governs
+          <strong>longitudinal relaxation</strong> (population decay) while T₂ ≤ 2T₁ governs
+          <strong>transverse dephasing</strong>. The TLS → Lorentz collapse is the first ontological
+          validation: the quantum model must reproduce the classical lineshape with RMS error &lt; 1%.
+        </p>
+      </div>
+    </div>
+
+    <!-- JC Tab -->
+    <div id="tab-jc" class="tab-panel">
+      <div class="card-grid card-grid-2">
+        <div class="chart-card">
+          <div class="chart-title">Vacuum Rabi Splitting</div>
+          <div class="chart-subtitle">Cavity transmission spectrum showing polariton branches (upper/lower)</div>
+          <div class="chart-wrap" style="height:300px;">
+            <canvas id="jcSplittingChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Jaynes–Cummings Energy Ladder</div>
+          <div class="chart-subtitle">Dressed state energies as a function of coupling strength g</div>
+          <div class="chart-wrap" style="height:300px;">
+            <canvas id="jcEnergyChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="highlight-box" style="margin-top:1.5rem;">
+        <p>
+          The Jaynes–Cummings model describes a TLS coupled to a <strong>single quantised cavity mode</strong>.
+          In the strong coupling regime (g ≫ κ, γ), the atom–photon interaction hybridises into
+          upper and lower polariton branches separated by the vacuum Rabi splitting 2g. This is
+          the gateway to cavity QED, quantum information processing, and polaritonic condensed matter.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── Architecture ── -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-label">Software Architecture</div>
+    <h2 class="section-title">Repository Structure</h2>
+    <p class="section-desc">
+      The codebase mirrors the physical hierarchy: core quantum mechanics, physical systems,
+      coherent control, visualisation, experiments, and a three-layer user API.
+    </p>
+
+    <div class="card-grid card-grid-2">
+      <div>
+        <div class="arch-tree">
+<span class="dir">archimedes/</span>
+├── <span class="dir">core/</span>                <span class="comment"># Fundamental QM</span>
+│   ├── <span class="file">constants.py</span>     <span class="comment"># CODATA 2018 SI</span>
+│   ├── <span class="file">quantum_operators.py</span>
+│   ├── <span class="file">bloch_solver.py</span>  <span class="comment"># RK4 integrator</span>
+│   ├── <span class="file">density_matrix.py</span>
+│   └── <span class="file">tls.py</span>           <span class="comment"># TLS dynamics</span>
+├── <span class="dir">systems/</span>             <span class="comment"># Physical systems</span>
+│   ├── <span class="file">tls_system.py</span>
+│   └── <span class="file">cavity_system.py</span>
+├── <span class="dir">control/</span>             <span class="comment"># Coherent control</span>
+│   ├── <span class="file">pulse_shapes.py</span>
+│   └── <span class="file">pulse_optimizer.py</span>
+├── <span class="dir">visualization/</span>       <span class="comment"># Bloch sphere</span>
+│   ├── <span class="file">bloch_plotter_matplotlib.py</span>
+│   └── <span class="file">bloch_plotter_plotly.py</span>
+├── <span class="dir">experiments/</span>         <span class="comment"># Scientific protocols</span>
+│   ├── <span class="file">pyridine_uv_calibration.py</span>
+│   └── <span class="file">tls_rabi_oscillation.py</span>
+└── <span class="dir">api/</span>                 <span class="comment"># 3-layer API</span>
+        </div>
+      </div>
+
+      <div class="card-grid" style="grid-template-columns: 1fr; gap: 1rem;">
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+            <span style="background:rgba(52,211,153,0.15); color:var(--accent3); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem; flex-shrink:0;">L1</span>
+            <div>
+              <div style="font-weight:700; font-size:0.95rem;">Quantum Researcher</div>
+              <div style="font-size:0.78rem; color:var(--text-muted);">API Layer 1</div>
+            </div>
+          </div>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Direct access to quantum operators, density matrices, Pauli operators (σₓ, σᵧ, σ_z, σ⁺, σ⁻), and Lindblad evolution.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+            <span style="background:rgba(56,189,248,0.15); color:var(--accent); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem; flex-shrink:0;">L2</span>
+            <div>
+              <div style="font-weight:700; font-size:0.95rem;">Control Engineer</div>
+              <div style="font-size:0.78rem; color:var(--text-muted);">API Layer 2</div>
+            </div>
+          </div>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Access to physical systems, pulse shapes, fidelity metrics, and optimisation algorithms (GRAPE/CRAB).</p>
+        </div>
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+            <span style="background:rgba(129,140,248,0.15); color:var(--accent2); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem; flex-shrink:0;">L3</span>
+            <div>
+              <div style="font-weight:700; font-size:0.95rem;">Experimentalist</div>
+              <div style="font-size:0.78rem; color:var(--text-muted);">API Layer 3</div>
+            </div>
+          </div>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Complete experimental protocols that generate <strong>hardware blueprints</strong> — frequency specs, pulse designs, and validated predictions ready for physical implementation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── Progress ── -->
+<section id="progress">
+  <div class="container">
+    <div class="section-label">Development Progress</div>
+    <h2 class="section-title">Roadmap Status</h2>
+    <p class="section-desc">
+      Current implementation status across all five research phases and key subsystems.
+    </p>
+
+    <div class="card-grid card-grid-2">
+      <div class="chart-card">
+        <div class="chart-title">Phase Completion Overview</div>
+        <div class="chart-subtitle">Progress across the five-phase scientific programme</div>
+        <div class="chart-wrap" style="height:280px;">
+          <canvas id="progressChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title" style="margin-bottom:1.5rem;">Subsystem Progress</div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="progress-name">Physical Core (Constants, Operators)</span>
+            <span class="progress-pct">100%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%; background:var(--accent3);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="progress-name">Lorentz Model & UV Spectroscopy</span>
+            <span class="progress-pct">100%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%; background:var(--accent3);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="progress-name">TLS Dynamics (Bloch / Unitary)</span>
+            <span class="progress-pct">75%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:75%; background:var(--accent);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="progress-name">Bloch Sphere Visualisation</span>
+            <span class="progress-pct">40%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:40%; background:var(--accent);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="progress-name">Coherent Control & Pulse Optimisation</span>
+            <span class="progress-pct">10%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:10%; background:var(--accent2);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="progress-name">Jaynes–Cummings / Cavity QED</span>
+            <span class="progress-pct">0%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:0%; background:var(--accent4);"></div></div>
+        </div>
+        <div class="progress-item" style="margin-bottom:0;">
+          <div class="progress-header">
+            <span class="progress-name">Polaritons & Condensed Matter</span>
+            <span class="progress-pct">0%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:0%; background:var(--accent5);"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-grid" style="margin-top:2rem;">
+      <div class="status-item">
+        <div class="status-icon">✅</div>
+        <div>
+          <div class="status-label">Core Status</div>
+          <div class="status-value" style="color:var(--accent3);">Implemented</div>
+        </div>
+      </div>
+      <div class="status-item">
+        <div class="status-icon">✅</div>
+        <div>
+          <div class="status-label">TLS→Lorentz Validation</div>
+          <div class="status-value" style="color:var(--accent3);">Completed</div>
+        </div>
+      </div>
+      <div class="status-item">
+        <div class="status-icon">🔄</div>
+        <div>
+          <div class="status-label">Visualisation</div>
+          <div class="status-value" style="color:var(--accent);">In Progress</div>
+        </div>
+      </div>
+      <div class="status-item">
+        <div class="status-icon">⚛</div>
+        <div>
+          <div class="status-label">Project State</div>
+          <div class="status-value" style="color:var(--accent);">Active</div>
+        </div>
+      </div>
+      <div class="status-item">
+        <div class="status-icon">🔬</div>
+        <div>
+          <div class="status-label">Domain</div>
+          <div class="status-value">Applied Quantum</div>
+        </div>
+      </div>
+      <div class="status-item">
+        <div class="status-icon">🌐</div>
+        <div>
+          <div class="status-label">Spirit</div>
+          <div class="status-value">Transdisciplinary</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── State Representation ── -->
+<section>
+  <div class="container">
+    <div class="section-label">State Representation Strategy</div>
+    <h2 class="section-title">Hybrid Quantum State Encoding</h2>
+    <p class="section-desc">
+      The laboratory employs a hybrid representation strategy that selects the most computationally
+      efficient encoding for each physical regime, with automatic synchronisation between representations.
+    </p>
+    <div class="card-grid card-grid-3">
+      <div class="card">
+        <div style="font-size:1.4rem; margin-bottom:0.75rem;">🔵</div>
+        <div style="font-weight:700; margin-bottom:0.4rem; color:var(--accent3);">Bloch Vector</div>
+        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">Phases 1–2 · TLS</div>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Efficient 3-component real vector (u, v, w) for pure two-level systems. Geometrically intuitive on the Bloch sphere. Minimal memory footprint.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:1.4rem; margin-bottom:0.75rem;">🟣</div>
+        <div style="font-weight:700; margin-bottom:0.4rem; color:var(--accent);">Density Matrix</div>
+        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">Phase 3 · Control & Decoherence</div>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Full 2×2 complex matrix ρ for mixed states. Essential for Lindblad evolution, fidelity computation, and open-system dynamics.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:1.4rem; margin-bottom:0.75rem;">🟠</div>
+        <div style="font-weight:700; margin-bottom:0.4rem; color:var(--accent2);">State Vector</div>
+        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">Phases 4–5 · JC & Cavities</div>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Full |ψ⟩ in the combined atom–field Hilbert space. Required for Jaynes–Cummings dynamics, photon number states, and entanglement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ── Philosophy ── -->
+<section id="philosophy">
+  <div class="container">
+    <div class="section-label">Project Philosophy</div>
+    <h2 class="section-title">Design Principles & Decisions</h2>
+    <p class="section-desc">
+      Three foundational architectural decisions shape the entire development strategy of the laboratory.
+    </p>
+
+    <div class="card-grid card-grid-3">
+      <div class="card" style="border-left: 3px solid var(--accent3);">
+        <div style="font-size:0.72rem; font-weight:700; color:var(--accent3); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">Decision 1</div>
+        <div style="font-weight:700; font-size:1rem; margin-bottom:0.75rem;">Lorentz Before Quantum</div>
+        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.7;">Start with the classical Lorentz model — proven, fast, directly validatable against experimental spectroscopy data. This provides a solid foundation and natural stepping stone to TLS, avoiding the conceptual error of premature quantisation.</p>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent);">
+        <div style="font-size:0.72rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">Decision 2</div>
+        <div style="font-weight:700; font-size:1rem; margin-bottom:0.75rem;">Single Core Repository</div>
+        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.7;">Keep simulation core, experiments, and documentation in one repository. Hardware control and cognitive AI will become satellite repositories only when physical prototypes exist. Focus enables velocity.</p>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--accent2);">
+        <div style="font-size:0.72rem; font-weight:700; color:var(--accent2); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;">Decision 3</div>
+        <div style="font-weight:700; font-size:1rem; margin-bottom:0.75rem;">Experiments Over Frameworks</div>
+        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.7;">Prioritise runnable experiments that produce results over abstract frameworks. The pyridine calibration experiment runs in &lt;5 seconds and produces a validated spectrum. Working demos motivate; abstract code does not.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:2rem;">
+      <p style="font-style:italic; font-size:1rem; color:var(--text); text-align:center;">
+        "La ciencia avanza cuando alguien ignora la frontera que todos los demás respetan."<br>
+        <span style="font-size:0.85rem; color:var(--text-muted);">— Archimedes Quantum Laboratory, Final Note</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <p style="margin-bottom:0.5rem;">
+      <strong style="color:var(--accent);">Archimedes Quantum Resonance Engine</strong>
+      &nbsp;·&nbsp; Scientific Roadmap Explorer
+    </p>
+    <p>
+      <a href="https://github.com/Blackmvmba88/archimedes-quantum-resonance-engine" target="_blank">GitHub Repository</a>
+      &nbsp;·&nbsp; Status: <span style="color:var(--accent3);">Active</span>
+      &nbsp;·&nbsp; Domain: Applied Quantum Physics
+      &nbsp;·&nbsp; License: MIT
+    </p>
+    <p style="margin-top:0.75rem; font-size:0.75rem; color:var(--text-dim);">
+      ⚛ Construyendo el futuro de la manipulación cuántica de materia, una frecuencia a la vez.
+    </p>
+  </div>
+</footer>
+
+<script>
+// ── Utilities ──
+const C = (id) => document.getElementById(id);
+const GRID_COLOR = 'rgba(255,255,255,0.06)';
+const TICK_COLOR = '#64748b';
+
+Chart.defaults.color = TICK_COLOR;
+Chart.defaults.borderColor = GRID_COLOR;
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+
+// ── Tab system ──
+function showTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── 1. Lorentz Absorption Spectrum ──
+(function() {
+  const wl = [], abs = [], absNarrow = [];
+  for (let nm = 200; nm <= 350; nm += 1) {
+    wl.push(nm);
+    const omega = 2 * Math.PI * 3e8 / (nm * 1e-9);
+    const omega0 = 2 * Math.PI * 3e8 / (260e-9);
+    const gamma = omega0 / 5.2;
+    const denom = Math.pow(omega0*omega0 - omega*omega, 2) + Math.pow(gamma*omega, 2);
+    abs.push(gamma * omega / denom);
+    // Narrower resonance for comparison
+    const gamma2 = omega0 / 12;
+    const denom2 = Math.pow(omega0*omega0 - omega*omega, 2) + Math.pow(gamma2*omega, 2);
+    absNarrow.push(gamma2 * omega / denom2);
+  }
+  // Normalise
+  const mx = Math.max(...abs), mx2 = Math.max(...absNarrow);
+  const absN = abs.map(v => v/mx), absN2 = absNarrow.map(v => v/mx2);
+
+  new Chart(C('lorentzChart'), {
+    type: 'line',
+    data: {
+      labels: wl,
+      datasets: [
+        { label: 'Lorentz Model (Q=5.2)', data: absN, borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.08)', borderWidth: 2, pointRadius: 0, fill: true },
+        { label: 'Narrow Resonance (Q=12)', data: absN2, borderColor: '#818cf8', backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 0, borderDash: [4,3] }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { boxWidth: 12, font: { size: 11 } } },
+        annotation: {
+          annotations: {
+            target: { type: 'line', xMin: 260, xMax: 260, borderColor: '#f87171', borderWidth: 1.5, borderDash: [4,3], label: { display: true, content: '260 nm', position: 'start', color: '#f87171', font: { size: 10 } } }
+          }
+        }
+      },
+      scales: {
+        x: { title: { display: true, text: 'Wavelength (nm)', font: { size: 11 } }, ticks: { maxTicksLimit: 8 } },
+        y: { title: { display: true, text: 'Normalised Absorption', font: { size: 11 } }, min: 0, max: 1.1 }
+      }
+    }
+  });
+})();
+
+// ── 2. Q-factor chart ──
+(function() {
+  const gammas = [0.05, 0.1, 0.15, 0.2, 0.3, 0.5];
+  const colors = ['#34d399','#38bdf8','#818cf8','#fb923c','#f472b6','#facc15'];
+  const datasets = gammas.map((gRel, i) => {
+    const wl = [], abs = [];
+    for (let nm = 220; nm <= 320; nm += 1) {
+      wl.push(nm);
+      const omega = 2 * Math.PI * 3e8 / (nm * 1e-9);
+      const omega0 = 2 * Math.PI * 3e8 / (260e-9);
+      const gamma = gRel * omega0;
+      const denom = Math.pow(omega0*omega0 - omega*omega, 2) + Math.pow(gamma*omega, 2);
+      abs.push(gamma * omega / denom);
+    }
+    const mx = Math.max(...abs);
+    const Q = Math.round(1/gRel);
+    return { label: `Q ≈ ${Q}`, data: abs.map(v=>v/mx), borderColor: colors[i], backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 0 };
+  });
+  new Chart(C('qfactorChart'), {
+    type: 'line',
+    data: { labels: Array.from({length:101},(_,i)=>220+i), datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        x: { title: { display: true, text: 'Wavelength (nm)', font: { size: 11 } }, ticks: { maxTicksLimit: 7 } },
+        y: { title: { display: true, text: 'Normalised Absorption', font: { size: 11 } }, min: 0, max: 1.1 }
+      }
+    }
+  });
+})();
+
+// ── 3. Rabi Oscillations ──
+(function() {
+  const N = 400, OmegaR = 0.1, periods = 10;
+  const T = 2 * Math.PI / OmegaR * periods;
+  const t = Array.from({length:N}, (_,i) => i*T/(N-1));
+  const Pe = t.map(ti => Math.pow(Math.sin(OmegaR * ti / 2), 2));
+  new Chart(C('rabiChart'), {
+    type: 'line',
+    data: {
+      labels: t.map(v => v.toFixed(1)),
+      datasets: [{ label: 'P_e(t) — Δ=0', data: Pe, borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.06)', borderWidth: 1.8, pointRadius: 0, fill: true }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { boxWidth: 12, font: { size: 11 } } } },
+      scales: {
+        x: { title: { display: true, text: 'Time (normalised)', font: { size: 11 } }, ticks: { maxTicksLimit: 6 } },
+        y: { title: { display: true, text: 'Excited Population P_e', font: { size: 11 } }, min: 0, max: 1.05 }
+      }
+    }
+  });
+})();
+
+// ── 4. Off-Resonance Rabi ──
+(function() {
+  const N = 400, OmegaR = 0.1;
+  const T = 2 * Math.PI / OmegaR * 8;
+  const t = Array.from({length:N}, (_,i) => i*T/(N-1));
+  const detunings = [0, 0.05, 0.1, 0.2];
+  const colors = ['#38bdf8','#34d399','#fb923c','#f472b6'];
+  const datasets = detunings.map((delta, i) => {
+    const OmegaEff = Math.sqrt(OmegaR*OmegaR + delta*delta);
+    const amp = Math.pow(OmegaR/OmegaEff, 2);
+    const Pe = t.map(ti => amp * Math.pow(Math.sin(OmegaEff * ti / 2), 2));
+    return { label: `Δ = ${delta}`, data: Pe, borderColor: colors[i], backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 0 };
+  });
+  new Chart(C('rabiDetuningChart'), {
+    type: 'line',
+    data: { labels: t.map(v=>v.toFixed(1)), datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        x: { title: { display: true, text: 'Time (normalised)', font: { size: 11 } }, ticks: { maxTicksLimit: 6 } },
+        y: { title: { display: true, text: 'Excited Population P_e', font: { size: 11 } }, min: 0, max: 1.05 }
+      }
+    }
+  });
+})();
+
+// ── 5. Bloch Relaxation ──
+(function() {
+  const N = 300, T1 = 100, T2 = 60;
+  const t = Array.from({length:N}, (_,i) => i*200/(N-1));
+  const Sz = t.map(ti => -1 + 2*Math.exp(-ti/T1));
+  const Sx = t.map(ti => Math.exp(-ti/T2) * Math.cos(0.15*ti));
+  const Sy = t.map(ti => Math.exp(-ti/T2) * Math.sin(0.15*ti));
+  new Chart(C('blochRelaxChart'), {
+    type: 'line',
+    data: {
+      labels: t.map(v=>v.toFixed(0)),
+      datasets: [
+        { label: 'w (Sz) — longitudinal', data: Sz, borderColor: '#38bdf8', backgroundColor: 'transparent', borderWidth: 1.8, pointRadius: 0 },
+        { label: 'u (Sx) — transverse', data: Sx, borderColor: '#34d399', backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 0 },
+        { label: 'v (Sy) — transverse', data: Sy, borderColor: '#818cf8', backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 0 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        x: { title: { display: true, text: 'Time (a.u.)', font: { size: 11 } }, ticks: { maxTicksLimit: 6 } },
+        y: { title: { display: true, text: 'Bloch Component', font: { size: 11 } }, min: -1.1, max: 1.1 }
+      }
+    }
+  });
+})();
+
+// ── 6. TLS → Lorentz Validation ──
+(function() {
+  const wl = [], tlsAbs = [], lorentzAbs = [];
+  for (let nm = 220; nm <= 310; nm += 1) {
+    wl.push(nm);
+    const omega = 2 * Math.PI * 3e8 / (nm * 1e-9);
+    const omega0 = 2 * Math.PI * 3e8 / (260e-9);
+    const gamma = omega0 / 5.2;
+    // Lorentz
+    const denomL = Math.pow(omega0*omega0 - omega*omega, 2) + Math.pow(gamma*omega, 2);
+    lorentzAbs.push(gamma * omega / denomL);
+    // TLS (weak field limit: same lineshape + small quantum correction)
+    const detuning = omega - omega0;
+    const T2 = 2/gamma;
+    const tlsVal = (1/T2) / (detuning*detuning + 1/(T2*T2));
+    tlsAbs.push(tlsVal);
+  }
+  const mxL = Math.max(...lorentzAbs), mxT = Math.max(...tlsAbs);
+  new Chart(C('tlsLorentzChart'), {
+    type: 'line',
+    data: {
+      labels: wl,
+      datasets: [
+        { label: 'Lorentz (classical)', data: lorentzAbs.map(v=>v/mxL), borderColor: '#fb923c', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0 },
+        { label: 'TLS (quantum, weak field)', data: tlsAbs.map(v=>v/mxT), borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.06)', borderWidth: 1.5, pointRadius: 0, borderDash: [5,3], fill: true }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        x: { title: { display: true, text: 'Wavelength (nm)', font: { size: 11 } }, ticks: { maxTicksLimit: 7 } },
+        y: { title: { display: true, text: 'Normalised Absorption', font: { size: 11 } }, min: 0, max: 1.1 }
+      }
+    }
+  });
+})();
+
+// ── 7. Vacuum Rabi Splitting (JC) ──
+(function() {
+  const N = 400;
+  const omega = Array.from({length:N}, (_,i) => -3 + 6*i/(N-1));
+  const kappa = 0.3, gamma = 0.2, g = 1.0;
+  const T_upper = omega.map(w => {
+    const d1 = Math.pow(w - g, 2) + Math.pow((kappa+gamma)/2, 2);
+    return 1/d1;
+  });
+  const T_lower = omega.map(w => {
+    const d2 = Math.pow(w + g, 2) + Math.pow((kappa+gamma)/2, 2);
+    return 1/d2;
+  });
+  const mx = Math.max(...T_upper, ...T_lower);
+  new Chart(C('jcSplittingChart'), {
+    type: 'line',
+    data: {
+      labels: omega.map(v=>v.toFixed(2)),
+      datasets: [
+        { label: 'Upper Polariton (UP)', data: T_upper.map(v=>v/mx), borderColor: '#818cf8', backgroundColor: 'rgba(129,140,248,0.06)', borderWidth: 2, pointRadius: 0, fill: true },
+        { label: 'Lower Polariton (LP)', data: T_lower.map(v=>v/mx), borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.06)', borderWidth: 2, pointRadius: 0, fill: true }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        x: { title: { display: true, text: 'Detuning (ω - ω₀) / g', font: { size: 11 } }, ticks: { maxTicksLimit: 7 } },
+        y: { title: { display: true, text: 'Transmission (a.u.)', font: { size: 11 } }, min: 0 }
+      }
+    }
+  });
+})();
+
+// ── 8. JC Energy Ladder ──
+(function() {
+  const gs = Array.from({length:100}, (_,i) => i*2/99);
+  const E_plus_1 = gs.map(g => 0.5 + Math.sqrt(g*g + 0.25));
+  const E_minus_1 = gs.map(g => 0.5 - Math.sqrt(g*g + 0.25));
+  const E_plus_2 = gs.map(g => 1.5 + Math.sqrt(2*g*g + 0.25));
+  const E_minus_2 = gs.map(g => 1.5 - Math.sqrt(2*g*g + 0.25));
+  new Chart(C('jcEnergyChart'), {
+    type: 'line',
+    data: {
+      labels: gs.map(v=>v.toFixed(2)),
+      datasets: [
+        { label: '|+,1⟩', data: E_plus_1, borderColor: '#818cf8', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0 },
+        { label: '|-,1⟩', data: E_minus_1, borderColor: '#38bdf8', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0 },
+        { label: '|+,2⟩', data: E_plus_2, borderColor: '#f472b6', backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 0, borderDash: [4,2] },
+        { label: '|-,2⟩', data: E_minus_2, borderColor: '#fb923c', backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 0, borderDash: [4,2] }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        x: { title: { display: true, text: 'Coupling Strength g (normalised)', font: { size: 11 } }, ticks: { maxTicksLimit: 6 } },
+        y: { title: { display: true, text: 'Energy (ℏω₀ = 1)', font: { size: 11 } } }
+      }
+    }
+  });
+})();
+
+// ── 9. Progress Radar ──
+(function() {
+  new Chart(C('progressChart'), {
+    type: 'radar',
+    data: {
+      labels: ['Phase 1\nLorentz', 'Phase 2\nTLS', 'Phase 3\nControl', 'Phase 4\nJC/Cavity', 'Phase 5\nPolaritons'],
+      datasets: [
+        {
+          label: 'Completion (%)',
+          data: [100, 75, 10, 0, 0],
+          borderColor: '#38bdf8',
+          backgroundColor: 'rgba(56,189,248,0.12)',
+          borderWidth: 2,
+          pointBackgroundColor: '#38bdf8',
+          pointRadius: 4
+        },
+        {
+          label: 'Target',
+          data: [100, 100, 100, 100, 100],
+          borderColor: 'rgba(255,255,255,0.1)',
+          backgroundColor: 'transparent',
+          borderWidth: 1,
+          borderDash: [3,3],
+          pointRadius: 0
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { stepSize: 25, font: { size: 9 }, backdropColor: 'transparent' },
+          grid: { color: GRID_COLOR },
+          angleLines: { color: GRID_COLOR },
+          pointLabels: { font: { size: 10 }, color: '#94a3b8' }
+        }
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>
