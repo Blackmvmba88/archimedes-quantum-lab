@@ -390,7 +390,7 @@
     </blockquote>
     <div class="hero-stats fade-in">
       <div class="stat">
-        <span class="stat-value">5</span>
+        <span class="stat-value">6</span>
         <span class="stat-label">Research Phases</span>
       </div>
       <div class="stat">
@@ -620,6 +620,44 @@ dw/dt =  Ω_R(t)·v - (w - w_eq)/T₁</div>
             <span class="tag">Rabi Splitting</span>
             <span class="tag">BEC Analogue</span>
             <span class="tag">Semiconductor QED</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 6 -->
+      <div class="phase-item phase-6">
+        <div class="phase-left">
+          <div class="phase-dot">6</div>
+          <div class="phase-line" style="background: transparent;"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-title">Quantum Error Correction — Fault-Tolerant Computation</span>
+            <span class="phase-badge badge-future">Future</span>
+          </div>
+          <p class="phase-desc">
+            The culminating phase introduces <strong>quantum error correction (QEC)</strong> — the
+            theoretical and computational framework that makes fault-tolerant quantum computation
+            possible. Building on the full Hilbert-space machinery developed in prior phases, this
+            stage implements stabiliser codes (Steane, Surface Code), logical qubit encoding, and
+            syndrome measurement protocols. The Lindblad master equation is extended to model
+            correlated error channels, and optimal decoding algorithms are benchmarked against
+            physical noise thresholds. The goal: demonstrate that logical error rates can be
+            suppressed below the fault-tolerance threshold through active correction.
+          </p>
+          <div class="phase-equation">
+            <div class="eq-label">Stabiliser Formalism</div>
+            <div class="eq-body">S|ψ⟩ = |ψ⟩ &nbsp;·&nbsp; S ∈ 𝒢ⁿ &nbsp;·&nbsp; [S<sub>i</sub>, S<sub>j</sub>] = 0</div>
+          </div>
+          <div class="phase-tags">
+            <span class="tag">Stabiliser Codes</span>
+            <span class="tag">Surface Code</span>
+            <span class="tag">Steane Code</span>
+            <span class="tag">Logical Qubits</span>
+            <span class="tag">Syndrome Measurement</span>
+            <span class="tag">Fault Tolerance</span>
+            <span class="tag">Noise Threshold</span>
+            <span class="tag">Decoding Algorithms</span>
           </div>
         </div>
       </div>
@@ -901,12 +939,19 @@ dw/dt =  Ω_R(t)·v - (w - w_eq)/T₁</div>
           </div>
           <div class="progress-bar"><div class="progress-fill" style="width:0%; background:var(--accent4);"></div></div>
         </div>
-        <div class="progress-item" style="margin-bottom:0;">
+        <div class="progress-item">
           <div class="progress-header">
             <span class="progress-name">Polaritons & Condensed Matter</span>
             <span class="progress-pct">0%</span>
           </div>
           <div class="progress-bar"><div class="progress-fill" style="width:0%; background:var(--accent5);"></div></div>
+        </div>
+        <div class="progress-item" style="margin-bottom:0;">
+          <div class="progress-header">
+            <span class="progress-name">Quantum Error Correction</span>
+            <span class="progress-pct">0%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:0%; background:#a78bfa;"></div></div>
         </div>
       </div>
     </div>
@@ -1329,11 +1374,11 @@ function showTab(name) {
   new Chart(C('progressChart'), {
     type: 'radar',
     data: {
-      labels: ['Phase 1\nLorentz', 'Phase 2\nTLS', 'Phase 3\nControl', 'Phase 4\nJC/Cavity', 'Phase 5\nPolaritons'],
+      labels: ['Phase 1\nLorentz', 'Phase 2\nTLS', 'Phase 3\nControl', 'Phase 4\nJC/Cavity', 'Phase 5\nPolaritons', 'Phase 6\nQEC'],
       datasets: [
         {
           label: 'Completion (%)',
-          data: [100, 75, 10, 0, 0],
+          data: [100, 75, 10, 0, 0, 0],
           borderColor: '#38bdf8',
           backgroundColor: 'rgba(56,189,248,0.12)',
           borderWidth: 2,
@@ -1342,7 +1387,7 @@ function showTab(name) {
         },
         {
           label: 'Target',
-          data: [100, 100, 100, 100, 100],
+          data: [100, 100, 100, 100, 100, 100],
           borderColor: 'rgba(255,255,255,0.1)',
           backgroundColor: 'transparent',
           borderWidth: 1,
