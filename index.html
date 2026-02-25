@@ -510,14 +510,14 @@
         <div class="phase-content">
           <div class="phase-header">
             <span class="phase-title">Quantum Matter + Classical Field — TLS & Decoherence</span>
-            <span class="phase-badge badge-active">In Development</span>
+            <span class="phase-badge badge-active">In Development — Validation PASSED</span>
           </div>
           <p class="phase-desc">
             The atom is replaced by a <strong>Two-Level System (TLS)</strong> with discrete quantum transitions.
             The Bloch vector (u, v, w) captures the full quantum state, while T₁ (energy relaxation) and
             T₂ (dephasing) model decoherence. The Lindblad master equation governs open-system dynamics.
             The critical validation: in the weak-field limit, the TLS must reproduce the Lorentz line
-            with RMS error &lt; 1%.
+            with RMS error &lt; 1%. <strong style="color:var(--accent3)">Ontological validation PASSED — RMS error = 0.27% via both Bloch and Lindblad methods.</strong>
           </p>
           <div class="equation-label">Bloch Equations (Rotating Frame)</div>
           <div class="equation-block">du/dt = -Δv - u/T₂
@@ -914,16 +914,16 @@ dw/dt =  Ω_R(t)·v - (w - w_eq)/T₁</div>
         <div class="progress-item">
           <div class="progress-header">
             <span class="progress-name">TLS Dynamics (Bloch / Unitary)</span>
-            <span class="progress-pct">75%</span>
+            <span class="progress-pct">100%</span>
           </div>
-          <div class="progress-bar"><div class="progress-fill" style="width:75%; background:var(--accent);"></div></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%; background:var(--accent3);"></div></div>
         </div>
         <div class="progress-item">
           <div class="progress-header">
             <span class="progress-name">Bloch Sphere Visualisation</span>
-            <span class="progress-pct">40%</span>
+            <span class="progress-pct">60%</span>
           </div>
-          <div class="progress-bar"><div class="progress-fill" style="width:40%; background:var(--accent);"></div></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:60%; background:var(--accent);"></div></div>
         </div>
         <div class="progress-item">
           <div class="progress-header">
@@ -1378,7 +1378,7 @@ function showTab(name) {
       datasets: [
         {
           label: 'Completion (%)',
-          data: [100, 75, 10, 0, 0, 0],
+          data: [100, 90, 10, 0, 0, 0],
           borderColor: '#38bdf8',
           backgroundColor: 'rgba(56,189,248,0.12)',
           borderWidth: 2,
